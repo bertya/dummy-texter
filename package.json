@@ -1,6 +1,6 @@
 {
-  "name": "project_a",
-  "version": "1.0.0",
+  "name": "dummy_texter",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "build": "webpack",
     "watch": "webpack --watch"
   },
-  "author": "Bing",
+  "author": "Bing Bai",
+  "email": "bert_b@live.com",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.26.0",
