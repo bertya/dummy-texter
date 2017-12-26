@@ -1,5 +1,5 @@
-import Tool from './core.js';
+import DummyTexter from './core.js';
 
-let tool = new Tool();
+let dummyTexter = new DummyTexter();
 
-tool.get();
+dummyTexter.init();

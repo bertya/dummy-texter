@@ -76,9 +76,9 @@ var _core2 = _interopRequireDefault(_core);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var tool = new _core2.default();
+var dummyTexter = new _core2.default();
 
-tool.get();
+dummyTexter.init();
 
 /***/ }),
 /* 1 */
@@ -99,13 +99,90 @@ var dummyTexter = function () {
   function dummyTexter() {
     _classCallCheck(this, dummyTexter);
 
-    this.test = 1;
+    this.questLists = {};
+
+    // temp data, when have apis will remove
+    this.name = [{ "data": "Erica Romaguera" }, { "data": "Caleigh Jerde" }, { "data": "Lucas Schultz" }, { "data": "Carole Marvin" }, { "data": "Dorian Feeney" }, { "data": "Nia Gutkowski" }, { "data": "Woodrow Nikolaus" }, { "data": "Jaquan Rolfson" }];
+    this.address = [{ "data": "728 Dooley Branch, Beckershire, LA 63598-2909" }, { "data": "622 Dixie Path, South Tobinchester, UT 98336" }, { "data": "20464 Hirthe Curve Suite, Emardton, CT 12471-4107" }, { "data": "280 Suzanne Throughway, Breannabury, OR 45801" }, { "data": "6803 Dickens Islands Apt. 567, Port Malikaview, TX 14942" }, { "data": "655 Auer Garden Apt. 026, Wolffport, VA 80438-4929" }, { "data": "97561 Gene Rest, North Audreanneville, CO 00498-2987" }, { "data": "101 Purdy Lakes, West Jordanmouth, NH 38827-6100" }];
   }
 
   _createClass(dummyTexter, [{
-    key: "get",
-    value: function get() {
-      console.log("result is " + this.test);
+    key: "init",
+    value: function init() {
+      this.prepareElements();
+    }
+  }, {
+    key: "prepareElements",
+    value: function prepareElements() {
+      this.targets = Array.prototype.slice.call(document.querySelectorAll('[data-dummy]'));
+
+      for (var i = 0; i < this.targets.length; i++) {
+        var cat = this.stringToArray(this.targets[i].dataset.dummy)[0];
+
+        if (this.questLists[cat] == undefined) {
+          this.questLists[cat] = 1;
+        } else {
+          this.questLists[cat]++;
+        }
+      }
+
+      this.getData();
+    }
+  }, {
+    key: "stringToArray",
+    value: function stringToArray(str) {
+      return str.split("-");
+    }
+  }, {
+    key: "getData",
+    value: function getData() {
+      var _this = this;
+
+      var _loop = function _loop(key) {
+        if (_this.questLists.hasOwnProperty(key)) {
+          _this.ajax(key, _this.questLists[key]).then(function (data) {
+            _this.fillContent(key, data);
+          }).catch(function (error) {
+            console.error(error.message);
+          });
+        }
+      };
+
+      for (var key in this.questLists) {
+        _loop(key);
+      }
+    }
+  }, {
+    key: "ajax",
+    value: function ajax(cat, count) {
+      var _this2 = this;
+
+      return new Promise(function (resolve, reject) {
+        // temp, should be ajax call
+        if (_this2[cat] !== undefined) {
+          resolve(_this2[cat]);
+        } else {
+          reject({ message: "dummyTexter: " + cat + " is not a valid category" });
+        }
+      });
+    }
+  }, {
+    key: "fillContent",
+    value: function fillContent(cat, data) {
+      var counter = 0;
+
+      for (var i = 0; i < this.targets.length; i++) {
+        var temp = this.stringToArray(this.targets[i].dataset.dummy);
+
+        if (temp[0] === cat) {
+          this.targets[i].innerHTML = data[counter++].data;
+          this.targets.splice(i, 1);
+        }
+
+        if (counter >= data.length) {
+          counter = 0;
+        }
+      }
     }
   }]);
 
